@@ -1,0 +1,21 @@
+DIYP，TVBOX，影视仓，IOS(APTV)等txt格式使用如下：
+线路7：http://router.bopop.buzz:9999/new/mdlive.txt
+线路8：http://mdxgh.dynv6.net/new/mdlive.txt
+线路9：http://router.bopop.buzz:9999/new/all.txt
+ 
+IPTVPRO需要使用m3u格式的播放器使用如下：
+线路3：http://router.bopop.buzz:9999/new/mdlive.m3u
+线路4：http://mdxgh.dynv6.net/new/mdlive.m3u
+线路5：http://oneone.dynv6.net/live/mdlive.m3u
+ 
+维护不容易，点点激励广告是对我最大的肯定了，谢谢
+ 
+推荐线路7和8    已经更新了央视和卫视
+ 
+线路9 可以推送 带宽够用速度还行 单个频道线路70-80条
+ 
+ 
+每日自动采集程序会自动采集，直播源推送链接如下：
+http://mdxgh.dynv6.net/zb/live/20240126.txt
+格式如下：
+http://mdxgh.dynv6.net/zb/live/格式为日期.txt
