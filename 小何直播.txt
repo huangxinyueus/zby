@@ -3,6 +3,7 @@
 
 CCTV01极速,http://ahcbn.ali-cdn.gitv.tv/gitv_escape/G_CCTV-1-HQ/G_CCTV-1-HQ.m3u8 
 CCTV02极速,http://ahcbn.ali-cdn.gitv.tv/gitv_escape/G_CCTV-2-HQ/G_CCTV-2-HQ.m3u8 
+CCTV02极速,http://ahcbn.ali-cdn.gitv.tv/gitv_escape/G_CCTV-2-HQ/G_CCTV-2-HQ.m3u8 
 CCTV03极速,http://ahcbn.ali-cdn.gitv.tv/gitv_escape/G_CCTV-3-HQ/G_CCTV-3-HQ.m3u8 
 CCTV04极速,http://ahcbn.ali-cdn.gitv.tv/gitv_escape/G_CCTV-4-HQ/G_CCTV-4-HQ.m3u8 
 CCTV05极速,http://ahcbn.ali-cdn.gitv.tv/gitv_escape/G_CCTV-5-HQ/G_CCTV-5-HQ.m3u8 
