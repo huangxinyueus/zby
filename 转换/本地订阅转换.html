@@ -1,0 +1,812 @@
+
+
+
+
+<!DOCTYPE HTML>
+<html class="no-js bg" lang="zh-cmn-Hans">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta charset="UTF-8">
+    <!--IE 8浏览器的页面渲染方式-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <!--默认使用极速内核：针对国内浏览器产商-->
+    <meta name="renderer" content="webkit">
+    <!--chrome Android 地址栏颜色-->
+        <meta name="theme-color" content="#3a3f51" />
+    
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+    <title>本地节点订阅转换，杜绝在线转换节点信息被盗取 - 科学上网 技术分享</title>
+            <link rel="icon" type="image/ico" href="/favicon.ico">
+        <meta name="description" content="在线的节点订阅地址转换存在的问题可能导致节点被盗转换节点的数量有限制直链平台不好找依赖后端平台稳定性本地订阅转换可解决在线订阅转换存在的问题简易版转换工具，视频演示function create..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="handsome" />
+<link rel="stylesheet" type="text/css" href="https://bulianglin.com/usr/plugins/CodePrettify/static/styles/GrayMac.css" />
+        <!-- 第三方CDN加载CSS -->
+        <link href="https://bulianglin.com/usr/themes/handsome/assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- 本地css静态资源 -->
+    <link rel="stylesheet" href="https://bulianglin.com/usr/themes/handsome/assets/css/function.min.css?v=6.0.020191205" type="text/css" />
+    <link rel="stylesheet" href="https://bulianglin.com/usr/themes/handsome/assets/css/handsome.min.css?v=6.0.020191205" type="text/css" />
+
+
+
+    <!--主题组件css文件加载-->
+    <link rel="stylesheet" href="https://bulianglin.com/usr/themes/handsome/assets/css/features/jquery.fancybox.min.css?v=6.0.020191205" type="text/css" />
+        <link rel="stylesheet" href="https://bulianglin.com/usr/themes/handsome/assets/css/features/newblack.min.css?v=6.0.020191205" type="text/css" />
+        <link rel="stylesheet" href="https://bulianglin.com/usr/themes/handsome/assets/css/features/code/zenburn.min.css?v=6.0.020191205" type="text/css" />
+    
+    <!--引入英文字体文件-->
+        <link rel="stylesheet" href="https://bulianglin.com/usr/themes/handsome/assets/css/font.min.css?v=6.0.020191205" type="text/css" />
+    
+    <style type="text/css">
+        
+        html.bg {
+        background: #EFEFEF
+        }
+        .cool-transparent .off-screen+* .app-content-body {
+        background: #EFEFEF
+        }
+@media (max-width:767px){
+    html.bg {
+        background: #EFEFEF
+        }
+        .cool-transparent .off-screen+* .app-content-body {
+        background: #EFEFEF
+        }
+}
+    .nav-tabs-alt .nav-tabs>li[data-index="2"].active~.navs-slider-bar {
+        transform: translateX(405%);
+    }
+    .nav-tabs-alt .nav-tabs>li[data-index="0"].active~.navs-slider-bar {
+        transform: translateX(100%);
+    }    </style>
+
+    <!--全站jquery-->
+    <script src="https://bulianglin.com/usr/themes/handsome/assets/libs/jquery/jquery.min.js"></script>
+
+    <!--网站统计代码-->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q56CTHF3D2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Q56CTHF3D2');
+</script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663110139304124"
+     crossorigin="anonymous"></script>
+    <script src="https://bulianglin.com/usr/themes/handsome/assets/js/features/fancyMorph.min.js"></script>
+
+
+</head>
+
+<body id="body" class="fix-padding">
+
+	<!-- aside -->
+	  
+  <div id="alllayout" class="app app-aside-fix container app-header-fixed ">  <!-- headnav -->
+      <header id="header" class="fix-padding app-header navbar box-shadow-bottom-lg" role="menu">
+      <!-- navbar header（交集处） -->
+        <div class="text-ellipsis navbar-header bg-white">
+        <button class="pull-right visible-xs" ui-toggle-class="show animated animated-lento fadeIn" target=".navbar-collapse">
+            <span class="menu-icons"><i data-feather="search"></i></span>
+        </button>
+        <button class="pull-left visible-xs" ui-toggle-class="off-screen animated" target=".app-aside" ui-scroll="app">
+            <span class="menu-icons"><i data-feather="menu"></i></span>
+        </button>
+        <!-- brand -->
+        <a href="https://bulianglin.com/" class="navbar-brand text-lt">
+                            <img src="/LOGO.png"/>                    </a>
+        <!-- / brand -->
+      </div>
+      <!-- / navbar header -->
+
+      <!-- navbar collapse（顶部导航栏） -->
+    <div class="collapse pos-rlt navbar-collapse bg-white">
+        <!-- search form -->
+        <form id="searchform1" class="searchform navbar-form navbar-form-sm navbar-left shift" method="post"
+              role="search">
+          <div class="form-group">
+            <div class="input-group rounded bg-white-pure box-shadow-wrap-normal">
+              <input  autocomplete="off" id="search_input" type="search" name="s" class="transparent rounded form-control input-sm no-borders padder" required placeholder="输入关键词搜索…">
+                <!--搜索提示-->
+                <ul id="search_tips_drop" class="small-scroll-bar dropdown-menu hide" style="display: block;top: 
+                30px; left: 0px;">
+                </ul>
+              <span id="search_submit" class="transparent input-group-btn">
+                  <button  type="submit" class="transparent btn btn-sm">
+                      <span class="feathericons" id="icon-search"><i data-feather="search"></i></span>
+                      <span class="feathericons animate-spin  hide" id="spin-search"><i
+                                  data-feather="loader"></i></span>
+<!--                      <i class="fontello fontello-search" id="icon-search"></i>-->
+<!--                      <i class="animate-spin  fontello fontello-spinner hide" id="spin-search"></i>-->
+                  </button>
+              </span>
+            </div>
+          </div>
+        </form>
+          <a href="" style="display: none" id="searchUrl"></a>
+        <!-- / search form -->
+                <ul class="nav navbar-nav navbar-right">
+                                              <!--登录管理-->
+          <li class="dropdown" id="easyLogin">
+            <a onclick="return false" data-toggle="dropdown" class="dropdown-toggle clear" data-toggle="dropdown">
+                        <span class="feathericons"><i data-feather="key"></i></span>
+                        <b class="caret"></b><!--下三角符号-->
+            </a>
+            <!-- dropdown(已经登录) -->
+                      <div class="dropdown-menu w-lg wrapper bg-white animated fadeIn" aria-labelledby="navbar-login-dropdown">
+            <form id="Login_form" action="https://bulianglin.com/index.php/action/login?_=d4de167bf139e05a14034a0c074e6554" method="post">
+              <div class="form-group">
+                <label for="navbar-login-user">用户名</label>
+                <input type="text" name="name" id="navbar-login-user" class="form-control" placeholder="用户名或电子邮箱"></div>
+              <div class="form-group">
+                <label for="navbar-login-password">密码</label>
+                <input type="password" name="password" id="navbar-login-password" class="form-control" placeholder="密码"></div>
+                <button style="width: 100%" type="submit" id="login-submit" name ="submitLogin" class="btn-rounded box-shadow-wrap-lg btn-gd-primary padder-lg">
+                    <span>登录</span>
+                    <span class="text-active">登录中...</span>
+                    <span class="banLogin_text">刷新页面后登录</span>
+                    <i class="animate-spin  fontello fontello-spinner hide" id="spin-login"></i>
+                    <i class="animate-spin fontello fontello-refresh hide" id="ban-login"></i>
+                </button>
+
+
+              
+              <input type="hidden" name="referer" value="https://bulianglin.com"
+                     data-current-url="value"></form>
+          </div>
+                    </li>
+          <!--/登录管理-->
+                    </ul>
+      </div>
+      <!-- / navbar collapse -->
+  </header>
+  <!-- / headnav -->
+
+  <!--选择侧边栏的颜色-->
+  <aside id="aside" class="app-aside hidden-xs bg-white">  <!--<aside>-->
+        <div class="aside-wrap" layout="column">
+        <div class="navi-wrap scroll-y scroll-hide" flex>
+          <!-- user -->
+          <div class="clearfix hidden-xs text-center hide  show" id="aside-user">
+            <div class="dropdown wrapper ">
+                <div ui-nav>
+                          <a href="#">
+                            <span class="thumb-lg w-auto-folded avatar m-t-sm  ">
+                  <img src="/head.png" class="img-full img-circle normal-shadow">
+                </span>
+              </a>
+                </div>
+              <a href="#" data-toggle="dropdown" class="dropdown-toggle hidden-folded  ">
+                <span class="clear">
+                  <span class="block m-t-sm">
+                    <strong class="font-bold text-lt">不良林</strong>
+                    <b class="caret"></b>
+                  </span>
+                  <span class="text-muted text-xs block"></span>
+                </span>
+              </a>
+              <!-- dropdown -->
+              <ul class="dropdown-menu animated fadeInRight w hidden-folded no-padder">
+                <li class="wrapper b-b m-b-sm bg-info m-n">
+                  <span class="arrow top hidden-folded arrow-info"></span>
+                  <div>
+                                                  <p>下午好，是时候打个盹了</p>
+                                  </div>
+                  <div class="progress progress-xs m-b-none dker">
+                    <div class="progress-bar bg-white" data-toggle="tooltip" data-original-title="时间已经度过54.17%" style="width: 54.17%"></div>
+                  </div>
+                </li>
+              </ul>
+              <!-- / dropdown -->
+            </div>
+          </div>
+          <!-- / user -->
+
+          <!-- nav -->
+          <nav ui-nav class="navi clearfix">
+            <ul class="nav">
+             <!--index-->
+                <div class="line dk hidden-folded"></div>
+                <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span>导航</span>
+              </li>
+                                          <!--主页-->
+              <li>
+                <a href="https://bulianglin.com/" class="auto">
+                    <span class="nav-icon"><i data-feather="home"></i></span>
+                    <span>首页</span>
+                </a>
+              </li>
+              <!-- /主页 -->
+              			                <!--分类category-->
+                              <li class="active">
+                <a class="auto">
+                  <span class="pull-right text-muted">
+                    <i class="fontello icon-fw fontello-angle-right text"></i>
+                    <i class="fontello icon-fw fontello-angle-down text-active"></i>
+                  </span>
+<!--                  <i class="glyphicon glyphicon-th"></i>-->
+                    <span class="nav-icon"><i data-feather="grid"></i></span>
+
+                    <span>分类</span>
+                </a>
+                <ul class="nav nav-sub dk">
+                  <li class="nav-sub-header">
+                    <a>
+                      <span>分类</span>
+                    </a>
+                  </li>
+                  <!--循环输出分类-->
+                    <li><a href="https://bulianglin.com/category/fan/"><b class="badge pull-right">50</b><span>科学上网</span></a></li><li><a href="https://bulianglin.com/category/internet/"><b class="badge pull-right">18</b><span>网络技术分享</span></a></li><li><a href="https://bulianglin.com/category/software/"><b class="badge pull-right">1</b><span>软件分享</span></a></li>                </ul>
+              </li>
+              <li> <a target="_self" href="/time.html" class ="auto"><span class="nav-icon"><i class="glyphicon glyphicon-record"></i></span><span>归档</span></a></li><li> <a target="_self" href="/about.html" class ="auto"><span class="nav-icon"><i class="glyphicon glyphicon-asterisk"></i></span><span>关于</span></a></li>                            </ul>
+          </nav>
+          <!-- nav -->
+        </div>
+          <!--end of .navi-wrap-->
+          <!--left_footer-->
+          
+      </div><!--.aside-wrap-->
+  </aside>
+<!-- content -->
+<div id="content" class="app-content">
+    <!--loading animate-->
+    <div id="loading" class="butterbar active hide">
+            <span class="bar"></span>
+        </div>	<!-- / aside -->
+<style>
+    #post-content{
+        font-size: 16px;
+    }
+</style>
+<!-- <div id="content" class="app-content"> -->
+   <a class="off-screen-toggle hide"></a>
+   <main class="app-content-body ">
+    <div class="hbox hbox-auto-xs hbox-auto-sm">
+    <!--文章-->
+     <div class="col center-part">
+         <!--生成分享图片必须的HTML结构-->
+             <!--标题下的一排功能信息图标：作者/时间/浏览次数/评论数/分类-->
+      
+        <header id="small_widgets" class="bg-light lter wrapper-md">
+             <h1 class="entry-title m-n font-thin text-black l-h">本地节点订阅转换，杜绝在线转换节点信息被盗取<a class="plus-font-size" data-toggle="tooltip" data-original-title="点击改变文章字体大小"><i data-feather="type"></i></a><a data-morphing="" id="morphing" data-src="#morphing-content" href="javascript:;" class="read_mode superscript m-l-sm" 
+data-toggle="tooltip" data-placement="right" data-original-title="阅读模式"><i data-feather="book-open"></i></a></h1>       <!--文章标题下面的小部件-->
+                  <ul  class="entry-meta text-muted list-inline m-b-none small
+             post-head-icon">
+             <!--作者-->
+             <li class="meta-author"><span class="post-icons"><i data-feather="user"></i></span><span
+                         class="sr-only">博主：</span> <a class="meta-value" href="https://bulianglin.com/author/1/" rel="author"> 不良林</a></li>
+             <!--发布时间-->
+             <li class="meta-date"><span class="post-icons"><i data-feather="clock"></i></span><span class="sr-only">发布时间：</span><time class="meta-value">2021 年 11 月 21 日</time></li>
+
+
+             <!--文字数目-->
+             <li class="meta-word"><span class="post-icons"><i data-feather="pen-tool"></i></span><span class="meta-value">1356字数</span></li>
+             <!--分类-->
+             <li class="meta-categories"><span class="post-icons"><i data-feather="hash"></i></span><span class="sr-only">分类：</span> <span class="meta-value"><a href="https://bulianglin.com/category/fan/">科学上网</a></span></li>
+         </ul>
+      </header>
+      <div class="wrapper-md" id="post-panel">
+	   <ol class="breadcrumb bg-white-pure" itemscope=""><li>
+                 <a href="https://bulianglin.com/" itemprop="breadcrumb" title="返回首页" data-toggle="tooltip"><span class="home-icons"><i data-feather="home"></i></span>首页</a>
+             </li><li class="active">正文&nbsp;&nbsp;</li></ol>       <!--博客文章样式 begin with .blog-post-->
+       <div id="postpage" class="blog-post">
+        <article class="single-post panel">
+        <!--文章页面的头图-->
+                 <!--文章内容-->
+         <div id="post-content" class="wrapper-lg">
+          <div class="entry-content l-h-2x">
+          <h2>在线的节点订阅地址转换存在的问题</h2><ul><li>可能导致<code>节点被盗</code></li><li>转换节点的数量有限制</li><li>直链平台不好找</li><li>依赖后端平台稳定性<br><strong>本地订阅转换可解决在线订阅转换存在的问题</strong></li></ul><hr><h2>简易版转换工具，<a href="https://bulianglin.com/g/aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g_dj1VeHZqVF9uSExvNA" target="_blank" >视频演示</a></h2><script>
+function create() {
+    var filepath = document.getElementById('filepath').value;
+    var subtype = document.getElementById('subtype').value;
+    var kd = document.getElementById('kd');
+
+    if (filepath === "") {
+        alert("本地节点文件路径不能为空！");
+        return false;
+    }
+
+    var url = `http://localhost:25500/sub?target=${subtype}&url=${encodeURIComponent(filepath.replace(/\n/g, "|"))}&insert=false`;
+
+    kd.href = url;
+    kd.style = '';
+    kd.innerText = url;
+    kd.target='_blank';
+}
+</script>
+
+   <div id="pagewrap">
+   1.先下载<a href="https://bulianglin.com/g/aHR0cHM6Ly9naXRodWIuY29tL3RpbmR5MjAxMy9zdWJjb252ZXJ0ZXIvcmVsZWFzZXM" target="_blank" >订阅转换工具</a>，并运行<br/>
+   2.节点文件路径：<br/><textarea placeholder="支持单个节点、多个节点、直链和本地文件路径" id="filepath" style="width: 100%;"  rows="10"></textarea><br/>
+   3.将格式转换为：<select id="subtype">
+  <option value ="clash">clash</option>
+  <option value ="mixed">Base64通用</option>
+</select><br/>
+   <input type= "button"  value= '生成链接'  onclick= 'create();'  /> <br/> <br/>
+   <a id="kd" style="pointer-events: none;">请先生成链接！</a><br/><br/>
+
+   
+   </div><hr><p><a href="https://bulianglin.com/g/aHR0cHM6Ly9hY2w0c3NyLXN1Yi5naXRodWIuaW8v" target="_blank" ><strong>&gt;&gt;在线订阅转换</strong></a></p>          </div>
+                              <!--文章页脚的广告位-->
+                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663110139304124"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-8663110139304124"
+     data-ad-slot="9873638947"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>                          <!--文章的页脚部件：打赏和其他信息的输出-->
+             
+             <div class="show-foot">
+                 <div class="notebook">
+                     <i class="fontello fontello-clock-o"></i>
+                     <span>最后修改：2023 年 09 月 07 日 09 : 39  PM</span>
+                 </div>
+                 <div class="copyright" data-toggle="tooltip" data-html="true" data-original-title="转载请保留本文转载地址，著作权归作者所有"><span>© 允许规范转载</span>
+                 </div>
+             </div>
+                                  <!--/文章的页脚部件：打赏和其他信息的输出-->
+         </div>
+        </article>
+       </div>
+       <!--上一篇&下一篇-->
+       <nav class="m-t-lg m-b-lg">
+        <ul class="pager">
+        <li class="next"> <a class="box-shadow-wrap-normal" href="https://bulianglin.com/archives/50.html" title="关于Trojan节点证书验证的探讨" data-toggle="tooltip"> 
+下一篇 </a></li>   <li class="previous"> <a class="box-shadow-wrap-normal" href="https://bulianglin.com/archives/easyclash.html" title="EasyClash，基于Clash内核的轻量级科学上网工具" data-toggle="tooltip"> 上一篇 </a></li>
+        </ul>
+       </nav>
+       <!--评论-->
+              </div>
+     </div>
+     <!--文章右侧边栏开始-->
+             <aside class="asideBar col w-md bg-white-only bg-auto no-border-xs" role="complementary">
+     <div id="sidebar">
+      <section id="tabs-4" class="widget widget_tabs clear">
+       <div class="nav-tabs-alt no-js-hide">
+        <ul class="nav nav-tabs nav-justified box-shadow-bottom-normal tablist" role="tablist">
+         <li data-index="0" class="active" role="presentation"> <a href="#widget-tabs-4-hots" role="tab" aria-controls="widget-tabs-4-hots" aria-expanded="true" data-toggle="tab"><div class="sidebar-icon wrapper-sm"><i data-feather="thumbs-up"></i></div><span class="sr-only">热门文章</span> </a></li>
+                        <li data-index="2" role="presentation"> <a href="#widget-tabs-4-random" role="tab" aria-controls="widget-tabs-4-random" aria-expanded="false" data-toggle="tab"> <div class="sidebar-icon wrapper-sm"><i data-feather="gift"></i></div>  <span class="sr-only">随机文章</span>
+             </a></li>
+            <span class="navs-slider-bar"></span>
+        </ul>
+       </div>
+       <div class="tab-content">
+       <!--热门文章-->
+        <div id="widget-tabs-4-hots" class="tab-pane  fade in wrapper-md active" role="tabpanel">
+         <h5 class="widget-title m-t-none text-md">热门文章</h5>
+         <ul class="list-group no-bg no-borders pull-in m-b-none">
+          <li class="list-group-item">
+                <a href="https://bulianglin.com/archives/nicename.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/nicename.html" title="【零基础】2023最新保姆级纯小白节点搭建教程，人人都能学会，目前最简单、最安全、最稳定的专属节点搭建方法，手把手自建节点搭建教学，晚高峰高速稳定，4K秒开的科学上网线路体验"> 【零基础】2023最新保姆级纯小白节点搭建教程，人人都能学会，目前最简单、最安全、最稳定的专属节点搭建方法，手把手自建节点搭建教学，晚高峰高速稳定，4K秒开的科学上网线路体验 </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li><li class="list-group-item">
+                <a href="https://bulianglin.com/archives/nodescatch.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/nodescatch.html" title="nodesCatch V2.0 全自动一键节点测速工具"> nodesCatch V2.0 全自动一键节点测速工具 </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li><li class="list-group-item">
+                <a href="https://bulianglin.com/archives/easyclash.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/easyclash.html" title="EasyClash，基于Clash内核的轻量级科学上网工具"> EasyClash，基于Clash内核的轻量级科学上网工具 </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li><li class="list-group-item">
+                <a href="https://bulianglin.com/archives/51.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/51.html" title="本地节点订阅转换，杜绝在线转换节点信息被盗取"> 本地节点订阅转换，杜绝在线转换节点信息被盗取 </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li><li class="list-group-item">
+                <a href="https://bulianglin.com/archives/0227.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/0227.html" title="【偷拍神器】网恋翻车之乔碧萝你别跑"> 【偷拍神器】网恋翻车之乔碧萝你别跑 </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li>         </ul>
+        </div>
+                   <!--随机文章-->
+        <div id="widget-tabs-4-random" class="tab-pane fade wrapper-md no-js-show" role="tabpanel">
+            <h5 class="widget-title m-t-none text-md">随机文章</h5>
+            <ul class="list-group no-bg no-borders pull-in">
+            <li class="list-group-item">
+                <a href="https://bulianglin.com/archives/ipv62.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/ipv62.html" title="【建议收藏】IPv4分配耗尽？人人都有的公网IP，IPv6新手入门，电脑路由器配置IPv6地址，IPv6通信流程，IPv4的NAT网络地址转换存在的问题，IPv6-PD前缀委托下发无限公网IPv6地址"> 【建议收藏】IPv4分配耗尽？人人都有的公网IP，IPv6新手入门，电脑路由器配置IPv6地址，IPv6通信流程，IPv4的NAT网络地址转换存在的问题，IPv6-PD前缀委托下发无限公网IPv6地址 </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li><li class="list-group-item">
+                <a href="https://bulianglin.com/archives/sharenetwork.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/sharenetwork.html" title="将科学上网环境共享给局域网内其它设备的各种方式"> 将科学上网环境共享给局域网内其它设备的各种方式 </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li><li class="list-group-item">
+                <a href="https://bulianglin.com/archives/dnsproxy.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/dnsproxy.html" title="【进阶•DNS代理篇】最完美的DNS解决方案？通过代理DNS请求获取正确的ip，杜绝DNS泄露和DNS污染，解决透明代理下fake-ip存在的问题，开启sniffing流量嗅探亦可解决污染问题"> 【进阶•DNS代理篇】最完美的DNS解决方案？通过代理DNS请求获取正确的ip，杜绝DNS泄露和DNS污染，解决透明代理下fake-ip存在的问题，开启sniffing流量嗅探亦可解决污染问题 </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li><li class="list-group-item">
+                <a href="https://bulianglin.com/archives/lb.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/lb.html" title="使用CFW的parsers功能自动插入负载均衡策略组实现多线程下载带宽叠加，完美配合CDN优选IP"> 使用CFW的parsers功能自动插入负载均衡策略组实现多线程下载带宽叠加，完美配合CDN优选IP </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li><li class="list-group-item">
+                <a href="https://bulianglin.com/archives/cdn.html" class="pull-left thumb-sm m-r"></a>
+                <div class="clear">
+                    <h4 class="h5 l-h text-second"> <a href="https://bulianglin.com/archives/cdn.html" title="最佳的CDN节点优选IP工具"> 最佳的CDN节点优选IP工具 </a></h4>
+                    <small class="text-muted post-head-icon"></small></div></li>            </ul>
+        </div>
+       </div>
+      </section>
+      <!--博客信息-->
+                           <!--广告位置-->
+         <section id="a_d_sidebar" class="widget widget_categories wrapper-md clear">
+             <!-- <h5 class="widget-title m-t-none text-md">广告</h5> -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8663110139304124"
+     crossorigin="anonymous"></script>
+<!-- 全局右侧边栏广告位 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8663110139304124"
+     data-ad-slot="7084340999"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>         </section>
+                  <!--非文章页面-->
+
+    </div>
+     </aside>
+       <!--文章右侧边栏结束-->
+    </div>
+   </main>
+
+
+    <div id="morphing-content" class="hidden read_mode_article">
+        <div class="page">
+            <h1 class="title">本地节点订阅转换，杜绝在线转换节点信息被盗取</h1>
+            <div class="metadata singleline"><a href="#" rel="author" class="byline">不良林</a>&nbsp;•&nbsp;<span class="delimiter"></span><time class="date">2021 年 11 月 21 日</time></div>
+            <h2>在线的节点订阅地址转换存在的问题</h2><ul><li>可能导致<code>节点被盗</code></li><li>转换节点的数量有限制</li><li>直链平台不好找</li><li>依赖后端平台稳定性<br><strong>本地订阅转换可解决在线订阅转换存在的问题</strong></li></ul><hr><h2>简易版转换工具，<a href="https://bulianglin.com/g/aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g_dj1VeHZqVF9uSExvNA" target="_blank" >视频演示</a></h2>
+
+   <div id="pagewrap">
+   1.先下载<a href="https://bulianglin.com/g/aHR0cHM6Ly9naXRodWIuY29tL3RpbmR5MjAxMy9zdWJjb252ZXJ0ZXIvcmVsZWFzZXM" target="_blank" >订阅转换工具</a>，并运行<br/>
+   2.节点文件路径：<br/><textarea placeholder="支持单个节点、多个节点、直链和本地文件路径" id="filepath" style="width: 100%;"  rows="10"></textarea><br/>
+   3.将格式转换为：<select id="subtype">
+  <option value ="clash">clash</option>
+  <option value ="mixed">Base64通用</option>
+</select><br/>
+   <input type= "button"  value= '生成链接'  onclick= 'create();'  /> <br/> <br/>
+   <a id="kd" style="pointer-events: none;">请先生成链接！</a><br/><br/>
+
+   
+   </div><hr><p><a href="https://bulianglin.com/g/aHR0cHM6Ly9hY2w0c3NyLXN1Yi5naXRodWIuaW8v" target="_blank" ><strong>&gt;&gt;在线订阅转换</strong></a></p>
+        </div>
+    </div>
+    <script>
+        try {
+            $("[data-morphing]").fancyMorph({
+                hash : 'morphing'
+            });
+        }catch (e){
+
+        }
+
+            </script>
+<!-- footer -->
+	<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-51'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-51'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+var registCommentEvent = function() {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        focus: 'focus',
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        focus: 'onfocus',
+        load: 'onload'
+    };
+    var r = document.getElementById('respond-post-51');
+        
+    if (null != r) {
+        var forms = r.getElementsByTagName('form');
+        if (forms.length > 0) {
+            var f = forms[0], textarea = f.getElementsByTagName('textarea')[0], added = false;
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea[event.add](event.focus, function () {
+                    if (!added) {
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = '_';
+                            input.value = (function () {
+    var _O9dkI = 'd4'//'nS'
++'de1'//'BH'
++//'Q'
+'67'+//'j'
+'bf1'+//'ZNL'
+'39e'+''///*'bK'*/'bK'
++'05a'//'99'
++/* 'LIF'//'LIF' */''+//'8H'
+'14'+/* 'H'//'H' */''+''///*'8x'*/'8x'
++//'KUr'
+'034'+'a0'//'QS'
++//'5'
+'5'+//'ub'
+'c'+//'CI'
+'07'+//'g5'
+'4e6'+''///*'gYc'*/'gYc'
++//'sJ'
+'55'+//'ft'
+'4', _TrDpy = [[23,24]];
+    
+    for (var i = 0; i < _TrDpy.length; i ++) {
+        _O9dkI = _O9dkI.substring(0, _TrDpy[i][0]) + _O9dkI.substring(_TrDpy[i][1]);
+    }
+
+    return _O9dkI;
+})();
+                    
+                        f.appendChild(input);
+                        
+                        input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'checkReferer';
+                        input.value = 'false';
+                        
+                        f.appendChild(input);
+                        
+
+                        added = true;
+                    }
+                });
+            }
+        }
+    }
+};
+</script></div><!-- /content -->
+            <style>
+          .topButton>.btn{
+              top: 0;
+          }
+          </style>
+      
+      <div class="topButton panel panel-default">
+          <button id="goToTop" class="btn btn-default no-shadow pos-abt hide  border-radius-half-left"
+                  data-toggle="tooltip" data-placement="left" data-original-title="返回顶部">
+              <i class="fontello fontello-chevron-circle-up" aria-hidden="true"></i>
+          </button>
+      </div>
+  </footer>
+  </div><!--end of .app app-header-fixed-->
+
+<script>
+SearchConfig = {
+    url : "https://bulianglin.com/usr/plugins/Handsome/cache/search.json"
+}
+</script>
+
+<script type="text/javascript" src="https://bulianglin.com/usr/plugins/CodePrettify/static/clipboard.min.js"></script>
+<script type="text/javascript" src="https://bulianglin.com/usr/plugins/CodePrettify/static/prism.js"></script>
+
+    <!--定义全局变量-->
+    <script type="text/javascript">
+        window['LocalConst'] = {
+            COMMENT_NAME_INFO: '必须填写昵称或姓名',
+            COMMENT_EMAIL_INFO: '必须填写电子邮箱地址',
+            COMMENT_EMAIL_LEGAL_INFO: '邮箱地址不合法',
+            COMMENT_CONTENT_INFO: '必须填写评论内容',
+            COMMENT_SUBMIT_ERROR: '提交失败，请重试！',
+            COMMENT_CONTENT_LEGAL_INFO: '提交失败,评论被拦截，可能发言太快或内容不符合规则',
+
+            LOGIN_USERNAME_INFO: '必须填写用户名',
+            LOGIN_PASSWORD_INFO: '请填写密码',
+            LOGIN_SUBMIT_ERROR: '登录失败，请重新登录',
+            LOGIN_SUBMIT_INFO: '用户名或者密码错误，请重试',
+            LOGIN_SUBMIT_SUCCESS: '登录成功',
+            CLICK_TO_REFRESH: '点击以刷新页面',
+            LOGOUT_SUCCESS_REFRESH: '退出成功，正在刷新当前页面',
+
+            LOGOUT_ERROR: '退出失败，请重试',
+            LOGOUT_SUCCESS: '退出成功',
+
+            SUBMIT_PASSWORD_INFO: '密码错误，请重试',
+            COMMENT_TITLE: '评论通知',
+            LOGIN_TITLE: '登录通知',
+            ChANGYAN_APP_KEY: '',
+            CHANGYAN_CONF: '',
+
+            COMMENT_SYSTEM: '3',
+            COMMENT_SYSTEM_ROOT: '0',
+            COMMENT_SYSTEM_CHANGYAN: '1',
+            COMMENT_SYSTEM_OTHERS: '2',
+            EMOJI: '表情',
+            IS_PJAX: '1',
+            IS_PAJX_COMMENT: '1',
+            BASE_SCRIPT_URL: 'https://bulianglin.com/usr/themes/handsome/',
+            BLOG_URL: 'https://bulianglin.com/',
+            BLOG_URL_PHP: 'https://bulianglin.com/',
+            THEME_COLOR: '14',
+            THEME_COLOR_EDIT: 'white-white-white',
+            THEME_HEADER_FIX: '1',
+            THEME_ASIDE_FIX: '1',
+            THEME_ASIDE_FOLDED: '',
+            THEME_ASIDE_DOCK: '',
+            THEME_CONTAINER_BOX: '1',
+            THEME_HIGHLIGHT_CODE: '1',
+            THEME_TOC: '',
+            TOC_TITLE: '文章目录',
+            HEADER_FIX: '固定头部',
+            ASIDE_FIX: '固定导航',
+            ASIDE_FOLDED: '折叠导航',
+            ASIDE_DOCK: '置顶导航',
+            CONTAINER_BOX: '盒子模型',
+            OFF_SCROLL_HEIGHT: '50',
+            COMMENT_REJECT_PLACEHOLDER: '居然什么也不说，哼',
+            COMMENT_PLACEHOLDER: '说点什么吧……',
+            SHOW_SETTING_BUTTON: '',
+            THEME_VERSION: '6.0.020191205',
+
+            OPERATION_NOTICE: '操作通知',
+            SCREENSHOT_BEGIN: '正在生成当前页面截图……',
+            SCREENSHOT_NOTICE: '点击顶部下载按钮保存当前卡片',
+            SCREENSHORT_ERROR: '由于图片跨域原因导致截图失败',
+            SCREENSHORT_SUCCESS: '截图成功',
+            MUSIC_NOTICE: '播放通知',
+            MUSIC_FAILE: '当前音乐地址无效，自动为您播放下一首',
+            MUSIC_FAILE_END: '当前音乐地址无效',
+            MUSIC_LIST_SUCCESS: '歌单歌曲加载成功',
+            CDN_NAME: '',
+            LAZY_LOAD: ''
+        };
+
+    </script>
+
+
+
+<!--CDN加载-->
+<script src="https://bulianglin.com/usr/themes/handsome/assets/libs/bootstrap/js/bootstrap.min.js"></script>
+
+
+    <script src="https://bulianglin.com/usr/themes/handsome/assets/js/features/jquery.pjax.min.js" type="text/javascript"></script>
+    <script>
+        $(document).pjax('a[href^="https://bulianglin.com/"]:not(a[target="_blank"], a[no-pjax])', {
+            container: '#content',
+            fragment: '#content',
+            timeout: 8000
+        }).on('pjax:send',function () {
+                        $('#loading').removeClass('hide');
+                    }).on('pjax:click', function() {
+
+            window['Page'].doPJAXClickAction();
+            
+                        $('body,html').animate({scrollTop:0},100);
+            
+
+        }).on('pjax:complete', function() {
+            window['Page'].doPJAXCompleteAction();
+            if ($(".post-position").length > 0){
+                window['Page'].doPJAXCompletePostAction();
+            }
+                                    $('#loading').addClass('hide');
+            
+            if (typeof Prism !== 'undefined') {
+var pres = document.getElementsByTagName('pre');
+                for (var i = 0; i < pres.length; i++){
+                    if (pres[i].getElementsByTagName('code').length > 0)
+                        pres[i].className  = 'line-numbers';}
+Prism.highlightAll(true,null);}            
+
+        })
+    </script>
+
+
+<!--主题组件js加载-->
+
+    <!--平滑滚动组件-->
+    <script src="https://bulianglin.com/usr/themes/handsome/assets/js/features/SmoothScroll.min.js"></script>
+
+
+<!--pjax动画组件-->
+
+
+<script src="https://bulianglin.com/usr/themes/handsome/assets/js/features/feather.min.js?v=6.0.020191205"></script>
+
+
+
+
+<!--lightgallery必备组件-->
+<script src="https://bulianglin.com/usr/themes/handsome/assets/js/features/jquery.fancybox.min.js?v=6.0.020191205"></script>
+<script src="https://bulianglin.com/usr/themes/handsome/assets/js/features/easypiechart.min.js?v=6.0.020191205"></script>
+
+
+
+
+<!--主题组件js加载结束-->
+
+<!--主题核心js-->
+    <script src="https://bulianglin.com/usr/themes/handsome/assets/js/function.min.js?v=6.0.020191205"></script>
+    <script src="https://bulianglin.com/usr/themes/handsome/assets/js/core.min.js?v=6.0.020191205"></script>
+
+
+
+
+    <script type="text/javascript">
+            </script>
+
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"85ffcccd5c087977","r":1,"version":"2024.2.4","token":"8dddcdeb514a4e2d9be3048fea9056a8"}' crossorigin="anonymous"></script>
+</body>
+</html><!--html end-->
+  	<!-- / footer -->
+
+
