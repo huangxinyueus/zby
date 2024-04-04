@@ -91,6 +91,7 @@ CHC-家庭影院,http://59.174.209.2:4022/rtp/239.69.1.243:11100
 
 凤凰中文,http[240980877000204]80dbiptv.sn.chinamobile.comPLTV888888882243221226547index.m3u8
 凤凰资讯,http[240980877000204]80dbiptv.sn.chinamobile.comPLTV888888882243221226546index.m3u8
+香港卫视,http://[2409:8087:2001:20:2800:0:df6e:eb22]:80/ott.mobaibox.com/PLTV/1/224/3221228530/1.m3u8
 凤凰中文,http://171.217.88.197:4000/udp/239.93.0.162:2192
 凤凰中文,http://171.217.88.197:4000/udp/239.93.1.9:2192
 凤凰资讯,http://171.217.88.197:4000/udp/239.93.0.118:2191
@@ -108,14 +109,15 @@ CHC-家庭影院,http://59.174.209.2:4022/rtp/239.69.1.243:11100
 
 
 
-中天新聞,https://www.keai2024.lolyoutubeoIgbl7t0S_wquality=1080
+中天新闻,https://zb.keai2024.lol/youtube/oIgbl7t0S_w?quality=1080
 
-台視新聞台,https://www.keai2024.lolyoutubexL0ch83RAK8quality=1080
+台视新闻,https://zb.keai2024.lol/youtube/xL0ch83RAK8?quality=1080
 
-民視新聞,https://swww.keai2024.lolyoutubeylYJSBUgaMAquality=1080
+民视新闻,https://zb.keai2024.lol/youtube/ylYJSBUgaMA?quality=1080
+
+三立新闻,https://zb.keai2024.lol/youtube/oZdzzvxTfUY?quality=1080
 
 
-三立新聞live,https://www.keai2024.lolyoutubeoZdzzvxTfUYquality=1080
 
 
 
