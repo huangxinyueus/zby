@@ -28,6 +28,12 @@ CCTV17,http://117.177.180.53:8888/rtp/239.11.0.107:5140
 凤凰资讯,http://116.162.6.192/1.v.smtcdns.net/qctv.fengshows.cn/live/0701pin72.m3u8
 凤凰香港,http://116.162.6.192/1.v.smtcdns.net/qctv.fengshows.cn/live/0701phk72.m3u8
 
+TVBS新闻,http://extraott.com:80/live/7921751389/6097373662/5499.m3u8
+东森新闻,http://extraott.com:80/live/7921751389/6097373662/5536.m3u8
+寰宇新闻,http://extraott.com:80/live/7921751389/6097373662/5523.m3u8
+中天新闻,http://extraott.com:80/live/7921751389/6097373662/5553.m3u8
+年代新闻,http://extraott.com:80/live/7921751389/6097373662/5509.m3u8
+
 
 🇨🇳🇨🇳央视IPV6🇨🇳🇨🇳,#genre#
 
