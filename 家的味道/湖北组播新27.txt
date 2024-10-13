@@ -60,6 +60,10 @@ CHANNEL-V@@@http://175.152.113.23:4022/udp/239.93.1.7:2194
 
 
 
+凤凰中文,https://k44991.kylintv.tv/live/pxna_iphone.m3u8
+凤凰资讯,https://k44991.kylintv.tv/live/pxinhd_iphone.m3u8
+香港卫视,http://zhibo.hkstv.tv/livestream/mutfysrq/playlist.m3u8
+
 
 
 深圳卫视,http://59.174.76.114:8848/rtp/239.254.96.137:8896
