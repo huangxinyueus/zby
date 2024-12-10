@@ -32,8 +32,6 @@ CHC家庭影院,http://[2409:8087:3c02:21:0:1:0:100a]:6410/shandong_cabletv.live
 CHANNEL-V,http://118.113.234.107:4022/udp/239.93.0.157:2194
 CHANNEL-V,http://118.113.234.107:4022/udp/239.93.1.7:2194
 
-深圳卫视高清,http://118.113.234.107:4022/udp/239.93.0.182:5140
-河南卫视高清,http://118.113.234.107:4022/udp/239.93.42.45:5140
 
 梨园频道,http://[2409:8087:3c02:21:0:1:0:100a]:6410/shandong_cabletv.live.zte.com////CHANNEL00000656/index.m3u8?IASHttpSessionId=
 武术世界,http://[2409:8087:3c02:21:0:1:0:100a]:6410/shandong_cabletv.live.zte.com////CHANNEL00000657/index.m3u8?IASHttpSessionId=
