@@ -1,0 +1,4 @@
+2.1.1
+https://musicfreepluginshub.2020818.xyz/plugins.json
+2.2.2
+https://gitee.com/xujin621/Photo/releases/download/V1.0.0/music1.json
