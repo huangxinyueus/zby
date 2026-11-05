@@ -66,7 +66,7 @@ change_ipv4() {
         
         for i in "${!local_ipv4s[@]}"; do
             echo " [$i] ${local_ipv4s[$i]}"
-        end
+        done
         echo " [b] 返回上一级菜单"
         
         read -p "请选择要作为默认出口的 IPv4 编号: " ip_idx
@@ -77,9 +77,7 @@ change_ipv4() {
         if [[ "${local_ipv4s[$ip_idx]}" ]]; then
             chosen_ip="${local_ipv4s[$ip_idx]}"
             default_dev=$(ip route show default | awk '/default/ {print $5}' | head -n1)
-            if [ -z "$default_dev" ]; then
-                default_dev=$(ip route show | awk '/^default/ {print $5}' | head -n1)
-            fi
+            [ -z "$default_dev" ] && default_dev=$(ip route show | awk '/^default/ {print $5}' | head -n1)
             
             if [ -n "$default_dev" ]; then
                 ip route replace default dev "$default_dev" src "$chosen_ip"
@@ -110,7 +108,7 @@ change_ipv6() {
         
         for i in "${!local_ipv6s[@]}"; do
             echo " [$i] ${local_ipv6s[$i]}"
-        end
+        done
         echo " [b] 返回上一级菜单"
         
         read -p "请选择要作为默认出口的 IPv6 编号: " ip_idx
@@ -121,9 +119,7 @@ change_ipv6() {
         if [[ "${local_ipv6s[$ip_idx]}" ]]; then
             chosen_ip="${local_ipv6s[$ip_idx]}"
             default_dev=$(ip -6 route show default | awk '/default/ {print $5}' | head -n1)
-            if [ -z "$default_dev" ]; then
-                default_dev=$(ip -6 route show | awk '/^default/ {print $5}' | head -n1)
-            fi
+            [ -z "$default_dev" ] && default_dev=$(ip -6 route show | awk '/^default/ {print $5}' | head -n1)
             
             if [ -n "$default_dev" ]; then
                 ip -6 route replace default dev "$default_dev" src "$chosen_ip"
@@ -170,7 +166,6 @@ uninstall_tool() {
 
 # 自动注册快捷键命令 `ip-qh`
 setup_shortcut() {
-    # 将当前脚本保存到系统目录
     cp "$0" /usr/local/bin/ip-switcher.sh 2>/dev/null
     chmod +x /usr/local/bin/ip-switcher.sh
     
@@ -181,7 +176,6 @@ EOF
     chmod +x "$BIN_PATH"
 }
 
-# 如果是通过远程直接管道执行，先完成安装与注册
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     setup_shortcut
 fi
