@@ -1,16 +1,4 @@
-/dev/fd/63: line 26: `    read -rp 是否开启 Reality 伪装? [yN] (默认 n)  input_reality'
-```[cite: 2]
-
-### 出错原因
-提示文字两端的**双引号丢失了**[cite: 2]。在 Bash 中，没有被引号包裹的圆括号 `(默认 n)` 会被当作**子 Shell 语法**进行解析，从而触发语法错误并直接中断执行[cite: 2]。
-
----
-
-### 解决办法
-
-进入你的 GitHub 仓库（`[https://github.com/huangxinyueus/zby](https://github.com/huangxinyueus/zby)`）编辑 `install.sh`，将整个文件内容替换为以下修正后的无特殊符号版本，并**Commit changes**保存：
-
-```bash
+cat << 'EOF' > /root/menu.sh
 #!/usr/bin/env bash
 set -e
 
@@ -32,15 +20,12 @@ install_node() {
     echo -e "${GREEN}      Xray-go 交互式一键部署引导          ${PLAIN}"
     echo -e "${GREEN}==========================================${PLAIN}"
     
-    # 1. Reality 伪装配置
     read -rp "是否开启 Reality 伪装？[y/n 默认 n]: " input_reality
     reality="${input_reality:-n}"
 
-    # 2. HTTP/3 配置
     read -rp "是否开启 HTTP/3？[y/n 默认 y]: " input_h3
     h3="${input_h3:-y}"
 
-    # 3. 传输协议
     echo "请选择本地传输协议（推荐选择 1）:"
     echo "  1. http2"
     echo "  2. http"
@@ -50,18 +35,15 @@ install_node() {
         *) protocol="http2" ;;
     esac
 
-    # 4. 端口
     read -rp "请输入本地监听端口 [默认 8001]: " input_port
     port="${input_port:-8001}"
 
-    # 5. 域名
     while true; do
         read -rp "请输入 Cloudflare 固定隧道域名: " domain
         [ -n "$domain" ] && break
         echo -e "${YELLOW}[!] 域名不能为空，请重新输入。${PLAIN}"
     done
 
-    # 6. Token
     while true; do
         read -rp "请输入 Cloudflare Tunnel Token: " token
         [ -n "$token" ] && break
@@ -136,3 +118,5 @@ show_menu() {
 
 check_root
 show_menu
+EOF
+bash /root/menu.sh
