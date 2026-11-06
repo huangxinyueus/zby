@@ -10,3 +10,7 @@ curl -fsSL -o /tmp/ip-switcher.sh https://raw.githubusercontent.com/huangxinyueu
 
 
 wget -O /tmp/ip-switcher.sh https://raw.githubusercontent.com/huangxinyueus/zby/main/ip-switcher.sh && chmod +x /tmp/ip-switcher.sh && bash /tmp/ip-switcher.sh
+
+xtpps节点
+
+bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-go-menu.sh)
