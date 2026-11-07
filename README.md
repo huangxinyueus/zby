@@ -16,6 +16,6 @@ xtpps节点
 
 bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-go-menu.sh)
 
-xtpps节点支持路径自定义
-
-bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-go-menu-custom-path.sh)
+xtpps节点支持路径自定义(
+Path)
+bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-argo.sh | tr -d '\r')
