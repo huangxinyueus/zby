@@ -3,7 +3,7 @@
 # ========================================================
 # 脚本名称: xhttp.sh
 # 仓库路径: huangxinyueus/zby
-# 基准底模: xray-argo.sh (严格保留原有结构，增补 7 查看与 8 订阅管理)
+# 功能: Xray-go 增强版 (原生支持自定义 Path 与回车默认无路径、查看配置详情与本地订阅分享)
 # ========================================================
 
 RED='\033[0;31m'
@@ -16,7 +16,6 @@ SUB_CONF="/etc/xray_sub_service.conf"
 SUB_SERVICE="/etc/systemd/system/xray-sub.service"
 SUB_DIR="/var/www/xray_sub"
 
-# 1. 自动寻找配置文件路径
 get_config_path() {
     for conf in /usr/local/etc/xray/config.json /etc/xray/config.json; do
         if [[ -f "$conf" ]]; then
@@ -27,26 +26,22 @@ get_config_path() {
     echo ""
 }
 
-# 2. 获取公网 IP (用于订阅链接)
 get_public_ip() {
     local ip
     ip=$(curl -s4m 5 https://api.ipify.org || curl -s4m 5 https://ipv4.icanhazip.com || curl -s4m 5 https://ifconfig.me)
     echo "$ip"
 }
 
-# 3. 底模原版 Path 注入函数 (采用 sys.argv 避免括号与引号冲突)
 apply_path_patch() {
     local p="$1"
     local conf
     conf=$(get_config_path)
-    [[ -z "$conf" ]] && return 1
+    [[ -z "$conf" ]] && return
 
     python3 - "$p" "$conf" << 'EOF'
 import sys, json
-
 path_val = sys.argv[1]
 f_path = sys.argv[2]
-
 try:
     with open(f_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
@@ -64,12 +59,11 @@ try:
     with open(f_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 except Exception:
-    sys.exit(1)
+    pass
 EOF
-    systemctl restart xray 2>/dev/null
+    systemctl restart xray
 }
 
-# 4. 提取当前生成的节点链接
 generate_node_link() {
     local conf
     conf=$(get_config_path)
@@ -113,7 +107,6 @@ except Exception:
 EOF
 }
 
-# 5. 更新本地订阅 Base64 文本
 update_sub_content_file() {
     [[ ! -f "$SUB_CONF" ]] && return
     source "$SUB_CONF"
@@ -125,13 +118,12 @@ update_sub_content_file() {
     echo -n "$raw_link" | base64 -w 0 > "$SUB_DIR/$SUB_PATH"
 }
 
-# 6. 底模原版 install_xray (完整调用你仓库的 xray-go-menu.sh 原汁原味执行)
 install_xray() {
     echo ""
     echo -e "${YELLOW}----------------------------------------------------------${PLAIN}"
     echo -e "【路径设置】"
     echo -e " • 直接按 [回车]：保持默认无路径模式"
-    echo -e " • 输入自定义路径 (例如: my-path 或 /my-path)"
+    echo -e " • 输入自定义路径 (例如: tianxia 或 /tianxia)"
     echo -e "${YELLOW}----------------------------------------------------------${PLAIN}"
     read -r -p "请输入自定义 Path 路径: " raw_path
 
@@ -146,22 +138,15 @@ install_xray() {
         echo ">>> 未设置路径，将使用默认无路径模式。"
     fi
 
-    echo ""
-    echo -e "示例域名: ${SKYBLUE}node.example.com${PLAIN}"
-    read -r -p "请输入你的 Cloudflare Tunnel 域名 (回车跳过): " input_dom
-    input_dom=$(echo "$input_dom" | xargs)
-    if [[ -n "$input_dom" ]]; then
-        echo "$input_dom" > /etc/xray_tunnel_domain.txt
-    fi
-
-    # 完整调用你仓库内原版跑得通的基础脚本流程
+    # 下载并执行你仓库原版的基础安装流程
     local temp_installer="/tmp/xray_original_menu.sh"
     curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-go-menu.sh | tr -d '\r' > "$temp_installer"
     
+    # 调起原版安装交互
     bash "$temp_installer"
     rm -f "$temp_installer"
 
-    # 若输入了路径，后置无损打入配置
+    # 若输入了路径，后置写入配置
     if [[ -n "$custom_path" ]]; then
         apply_path_patch "$custom_path"
         echo ""
@@ -177,7 +162,6 @@ install_xray() {
     read -r -p "按回车键继续..."
 }
 
-# 7. 单独修改/切换 Path
 modify_path_only() {
     local conf
     conf=$(get_config_path)
@@ -208,7 +192,6 @@ modify_path_only() {
     read -r -p "按回车键继续..."
 }
 
-# 8. 查看配置及节点链接 (增补 Path 详情展示)
 view_xray_config() {
     local conf
     conf=$(get_config_path)
@@ -240,9 +223,9 @@ sk = 'xhttpSettings' if net == 'xhttp' else 'wsSettings'
 path = ss.get(sk, {}).get('path', '')
 
 if path:
-    path_display = f'\033[0;32m{path}\033[0m'
+    path_display = f'[0;32m{path}[0m'
 else:
-    path_display = '\033[0;33m无 (根路径)\033[0m'
+    path_display = '[0;33m无 (根路径)[0m'
 
 host = "node.example.com"
 if os.path.exists("/etc/xray_tunnel_domain.txt"):
@@ -270,7 +253,7 @@ q = urllib.parse.urlencode(params)
 link = f'vless://{uuid}@{host}:443?{q}#Argo_{net}_Node'
 
 print('节点链接 (VLESS 链接):')
-print(f'\033[0;36m{link}\033[0m')
+print(f'[0;36m{link}[0m')
 print('------------------------------------------------------')
 print('• Cloudflare 后台 Public Hostname Path 请填: ' + (path.lstrip('/') if path else '留空不填'))
 print('• 客户端 (如 v2rayN) 导入后 Path 对应为: ' + (path if path else '留空不填'))
@@ -279,7 +262,6 @@ EOF
     read -r -p "按回车键继续..."
 }
 
-# 9. 设置本地 IP 订阅分享链接 (多交互子菜单)
 sub_menu() {
     while true; do
         clear
@@ -339,15 +321,26 @@ EOF
     cat << EOF > /usr/local/bin/xray_sub_server.py
 import http.server
 import socketserver
+import os
 
-PORT = $in_port
-DIRECTORY = "$SUB_DIR"
+conf_file = "/etc/xray_sub_service.conf"
+port = $in_port
+directory = "$SUB_DIR"
+
+if os.path.exists(conf_file):
+    with open(conf_file) as f:
+        for line in f:
+            if line.startswith("SUB_PORT="):
+                try:
+                    port = int(line.split("=")[1].strip().strip('"'))
+                except Exception:
+                    pass
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=DIRECTORY, **kwargs)
+        super().__init__(*args, directory=directory, **kwargs)
 
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
+with socketserver.TCPServer(("", port), Handler) as httpd:
     httpd.serve_forever()
 EOF
 
@@ -400,7 +393,7 @@ change_sub_path() {
     fi
 
     rm -f "$SUB_DIR/$SUB_PATH"
-    sed -i "s/SUB_PATH=.*/SUB_PATH=\"$new_pwd\"/" "$SUB_CONF"
+    sed -i "s/SUB_PATH=.*/SUB_PATH="$new_pwd"/" "$SUB_CONF"
     update_sub_content_file
 
     echo -e "${GREEN}>>> 订阅路径已更新！新订阅链接为:${PLAIN}"
@@ -425,8 +418,7 @@ change_sub_port() {
         return
     fi
 
-    sed -i "s/SUB_PORT=.*/SUB_PORT=\"$new_port\"/" "$SUB_CONF"
-    sed -i "s/PORT = .*/PORT = $new_port/" /usr/local/bin/xray_sub_server.py
+    sed -i "s/SUB_PORT=.*/SUB_PORT="$new_port"/" "$SUB_CONF"
 
     systemctl restart xray-sub
     echo -e "${GREEN}>>> 订阅端口已更换！新订阅链接为:${PLAIN}"
@@ -457,21 +449,6 @@ uninstall_sub() {
     read -r -p "按回车键继续..."
 }
 
-# 10. 底模原版卸载逻辑
-uninstall_xray() {
-    read -r -p "确认卸载 Xray 吗? [y/N]: " confirm_del
-    if [[ "$confirm_del" == [yY] ]]; then
-        systemctl stop xray 2>/dev/null
-        systemctl disable xray 2>/dev/null
-        rm -f /etc/systemd/system/xray.service
-        rm -rf /usr/local/etc/xray /etc/xray /usr/local/bin/xray
-        systemctl daemon-reload
-        echo -e "${GREEN}Xray 已彻底清理卸载完成。${PLAIN}"
-    fi
-    read -r -p "按回车键继续..."
-}
-
-# 主菜单交互
 show_menu() {
     while true; do
         clear
@@ -501,14 +478,25 @@ show_menu() {
             4)
                 echo ""
                 echo ">>> 端口监听情况:"
-                ss -tulpn | grep LISTEN
+                sudo ss -tulpn | grep LISTEN
                 echo ""
                 echo ">>> Xray 服务状态:"
                 systemctl status xray --no-pager
                 read -r -p "按回车键继续..."
                 ;;
             5) journalctl -u xray -e --no-pager -n 50 ;;
-            6) uninstall_xray ;;
+            6)
+                read -r -p "确认卸载 Xray 吗? [y/N]: " confirm_del
+                if [[ "$confirm_del" == [yY] ]]; then
+                    systemctl stop xray 2>/dev/null
+                    systemctl disable xray 2>/dev/null
+                    rm -f /etc/systemd/system/xray.service
+                    rm -rf /usr/local/etc/xray /etc/xray /usr/local/bin/xray
+                    systemctl daemon-reload
+                    echo -e "${GREEN}Xray 已彻底清理卸载完成。${PLAIN}"
+                fi
+                read -r -p "按回车键继续..."
+                ;;
             7) view_xray_config ;;
             8) sub_menu ;;
             0) exit 0 ;;
