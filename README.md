@@ -18,5 +18,6 @@ bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-
 
 xtpps节点支持路径自定义(Path)
 
+目前是，xttp快捷
 
-bash <(curl -Ls https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-go-menu-custom-path-subscription.sh)
+bash <(curl -fsSL "https://raw.githubusercontent.com/huangxinyueus/zby/refs/heads/main/xray-go-menu-xttp-multisub.sh")
