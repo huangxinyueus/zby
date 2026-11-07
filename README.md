@@ -13,4 +13,9 @@ wget -O /tmp/ip-switcher.sh https://raw.githubusercontent.com/huangxinyueus/zby/
 
 xtpps节点
 
+
 bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-go-menu.sh)
+
+xtpps节点支持路径自定义
+
+bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/main/xray-go-menu-custom-path.sh)
