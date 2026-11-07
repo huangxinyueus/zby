@@ -1,5 +1,7 @@
 ip-switcher.sh  切换IP
 
+感觉大佬仓库：https://github.com/eishare/Xray-go
+
 
 
 方法一：curl
