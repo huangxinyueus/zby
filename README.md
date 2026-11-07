@@ -18,4 +18,4 @@ bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-
 
 xtpps节点支持路径自定义
 
-bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/main/xray-go-menu-custom-path.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/huangxinyueus/zby/main/xray-go-menu-custom-path.sh)
