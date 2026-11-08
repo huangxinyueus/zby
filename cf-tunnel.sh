@@ -1,56 +1,78 @@
-cat << 'EOF' > /usr/local/bin/cf-tunnel
+cat << 'EOF' > /tmp/cf-universal.sh
 #!/bin/sh
 
-# 1. 自动检测并安装必要依赖 (兼容 Alpine/Debian/Ubuntu)
+# 定义工作路径与日志
+WORK_DIR="/tmp/cf_tunnel_workspace"
+mkdir -p "$WORK_DIR"
+LOG_FILE="$WORK_DIR/tunnel.log"
+BIN_FILE="$WORK_DIR/cloudflared"
+
+# 1. 安装与依赖检查函数
 install_dependencies() {
-    if ! command -v cloudflared >/dev/null 2>&1; then
-        echo "正在下载安装 cloudflared 客户端..."
-        if [ -f /etc/alpine-release ] || [ "$(uname -s)" = "Linux" ] && grep -q "Alpine" /etc/issue 2>/dev/null; then
-            wget -O /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+    if [ ! -f "$BIN_FILE" ]; then
+        echo "正在下载 cloudflared 客户端..."
+        if [ -f /etc/alpine-release ] || grep -qi "Alpine" /etc/issue 2>/dev/null; then
+            wget -O "$BIN_FILE" https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
         else
-            curl -L --output /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+            if command -v curl >/dev/null 2>&1; then
+                curl -L --output "$BIN_FILE" https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+            else
+                wget -O "$BIN_FILE" https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+            fi
         fi
-        chmod +x /usr/local/bin/cloudflared
+        chmod +x "$BIN_FILE"
     fi
 }
 
-# 2. 启动隧道核心逻辑
+# 2. 启动隧道函数
 start_tunnel() {
     PORT=${1:-22837}
-    LOG_FILE="/tmp/cloudflared_tunnel.log"
-
+    
+    # 清理旧进程
     pkill -f "cloudflared tunnel" 2>/dev/null
+    rm -f "$LOG_FILE"
 
-    echo "正在为本地端口 $PORT 启动跨平台 Cloudflare 临时隧道..."
-    nohup cloudflared tunnel --url "http://localhost:${PORT}" > "$LOG_FILE" 2>&1 &
+    echo "正在为本地端口 $PORT 启动 Cloudflare 临时隧道..."
+    nohup "$BIN_FILE" tunnel --url "http://localhost:${PORT}" > "$LOG_FILE" 2>&1 &
 
     echo -n "正在等待获取动态隧道域名"
-    for i in $(seq 1 15); do
+    i=1
+    while [ $i -le 15 ]; do
         sleep 2
         echo -n "."
-        URL=$(grep -oE "https://[a-zA-Z0-9.-]+\.trycloudflare\.com" "$LOG_FILE" | head -n 1)
-        if [ -n "$URL" ]; then
-            echo -e "\n\n=========================================="
-            echo "✔ 隧道启动成功！"
-            echo "临时访问地址: $URL"
-            echo "转发本地端口: $PORT"
-            echo "=========================================="
-            exit 0
+        if [ -f "$LOG_FILE" ]; then
+            URL=$(grep -oE "https://[a-zA-Z0-9.-]+\.trycloudflare\.com" "$LOG_FILE" | head -n 1)
+            if [ -n "$URL" ]; then
+                echo ""
+                echo "=========================================="
+                echo "✔ 隧道启动成功！"
+                echo "临时访问地址: $URL"
+                echo "转发本地端口: $PORT"
+                echo "=========================================="
+                exit 0
+            fi
         fi
+        i=$((i + 1))
     done
 
-    echo -e "\n❌ 获取域名超时，请检查日志: cat $LOG_FILE"
+    echo ""
+    echo "❌ 获取域名超时，请检查日志: cat $LOG_FILE"
     exit 1
 }
 
-# 命令分发
+# 3. 停止隧道函数
+stop_tunnel() {
+    pkill -f "cloudflared tunnel"
+    echo "已成功停止所有 Cloudflare 隧道进程。"
+}
+
+# 4. 主控分发逻辑
 case "$1" in
     stop)
-        pkill -f "cloudflared tunnel"
-        echo "已停止所有 Cloudflare 隧道进程。"
+        stop_tunnel
         ;;
     log)
-        cat /tmp/cloudflared_tunnel.log
+        [ -f "$LOG_FILE" ] && cat "$LOG_FILE" || echo "暂无日志文件"
         ;;
     *)
         install_dependencies
@@ -58,5 +80,3 @@ case "$1" in
         ;;
 esac
 EOF
-
-chmod +x /usr/local/bin/cf-tunnel
